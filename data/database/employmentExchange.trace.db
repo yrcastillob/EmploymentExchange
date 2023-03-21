@@ -1,0 +1,42 @@
+2023-03-20 22:39:57 database: flush
+org.h2.message.DbException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Familia Castillo/OneDrive - universidadean.edu.co/Semestres Ing. Sistemas/6. Sexto Semestre 2023-1/Desarrollo_Software/Desarrollo_Software_Guias/4. Nociones Avanzadas de Programacion/EmploymentExchange/data/database/employmentExchange.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Familia Castillo/OneDrive - universidadean.edu.co/Semestres Ing. Sistemas/6. Sexto Semestre 2023-1/Desarrollo_Software/Desarrollo_Software_Guias/4. Nociones Avanzadas de Programacion/EmploymentExchange/data/database/employmentExchange.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:395)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:125)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:3318)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:593)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:469)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:4082)
+	at org.h2.mvstore.db.Store.<init>(Store.java:136)
+	at org.h2.engine.Database.<init>(Database.java:324)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:338)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:122)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:683)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:191)
+	at com.j256.ormlite.jdbc.JdbcConnectionSource.makeConnection(JdbcConnectionSource.java:139)
+	at com.j256.ormlite.jdbc.BaseJdbcConnectionSource.getReadWriteConnection(BaseJdbcConnectionSource.java:153)
+	at com.j256.ormlite.jdbc.BaseJdbcConnectionSource.getReadOnlyConnection(BaseJdbcConnectionSource.java:138)
+	at com.j256.ormlite.stmt.StatementExecutor.buildIterator(StatementExecutor.java:249)
+	at com.j256.ormlite.stmt.StatementExecutor.buildIterator(StatementExecutor.java:223)
+	at com.j256.ormlite.dao.BaseDaoImpl.createIterator(BaseDaoImpl.java:1118)
+	at com.j256.ormlite.dao.BaseDaoImpl.iterator(BaseDaoImpl.java:559)
+	at com.j256.ormlite.dao.BaseDaoImpl.iterator(BaseDaoImpl.java:548)
+	at EmploymentExchange.CVHandler.ageAverage(CVHandler.java:362)
+	at EmploymentExchange.CVHandler.menu(CVHandler.java:105)
+	at EmploymentExchange.CVHandler.main(CVHandler.java:44)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Familia Castillo/OneDrive - universidadean.edu.co/Semestres Ing. Sistemas/6. Sexto Semestre 2023-1/Desarrollo_Software/Desarrollo_Software_Guias/4. Nociones Avanzadas de Programacion/EmploymentExchange/data/database/employmentExchange.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Familia Castillo/OneDrive - universidadean.edu.co/Semestres Ing. Sistemas/6. Sexto Semestre 2023-1/Desarrollo_Software/Desarrollo_Software_Guias/4. Nociones Avanzadas de Programacion/EmploymentExchange/data/database/employmentExchange.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 28 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Familia Castillo/OneDrive - universidadean.edu.co/Semestres Ing. Sistemas/6. Sexto Semestre 2023-1/Desarrollo_Software/Desarrollo_Software_Guias/4. Nociones Avanzadas de Programacion/EmploymentExchange/data/database/employmentExchange.mv.db [2.1.214/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:1004)
+	at org.h2.mvstore.FileStore.open(FileStore.java:178)
+	at org.h2.mvstore.FileStore.open(FileStore.java:128)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
+	... 22 more
