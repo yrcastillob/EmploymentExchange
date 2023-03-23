@@ -7,9 +7,12 @@ import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import com.j256.ormlite.support.ConnectionSource;
 
+import javax.swing.*;
+import java.awt.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-
 public class CVHandler {
     // Connect with the database
     static String url = "jdbc:h2:file:./data/database/employmentExchange";
@@ -46,75 +49,42 @@ public class CVHandler {
     }
 
     public static void menu() throws Exception {
-        System.out.println("**************************");
-        System.out.println("MENÚ");
-        System.out.println("Por favor, ingrese un número para seleccionar la opción de lo que desea hacer:");
-        System.out.println("1. Añadir una hoja de vida.");
-        System.out.println("2. Mostrar cédula de los aspirantes.");
-        System.out.println("3. Buscar aspirante por cédula.");
-        System.out.println("4. Buscar aspirante por nombre.");
-        System.out.println("5. Ordenar la lista de acuerdo a criterio.");
-        System.out.println("6. Ver candidato con más experiencia.");
-        System.out.println("7. Ver candidato más joven.");
-        System.out.println("8. Contratar candidato.");
-        System.out.println("9. Eliminar candidatos con experiencia de trabajo menor a años específicados.");
-        System.out.println("10. Mostrar el promedio de edad de los aspirantes.");
-        int selection = keyboard.nextInt();
-        switch (selection){
-            case 1:
-                addCV();
-                break;
-            case 2:
-                showCandidatesID();
-                break;
-            case 3:
-                System.out.println("");
-                System.out.println("**************************");
-                System.out.println("Por favor ingrese la cédula para buscar candidato:");
-                keyboard.nextLine();
-                String nationalID = keyboard.nextLine();
-                searchByID(nationalID);
-                break;
-            case 4:
-                System.out.println("");
-                System.out.println("**************************");
-                System.out.println("Ingrese el nombre que desea buscar");
-                keyboard.nextLine();
-                String fullName = keyboard.nextLine();
-                searchByName(fullName);
-                break;
-            case 5:
-                sortList();
-                break;
-            case 6:
-                mostExperienced();
-                break;
-            case 7:
-                younger();
-                break;
-            case 8:
-                hire();
-                break;
-            case 9:
-                System.out.println("");
-                System.out.println("**************************");
-                System.out.println("Por favor ingrese la experiencia mínima que debe tener. Candidatos con experiencia inferior a la requerida serán eliminados.");
-                keyboard.nextLine();
-                double workExperience = Double.parseDouble(keyboard.nextLine());
-                deleteCandidatesBcWorkExperience(workExperience);
-                break;
-            case 10:
-                ageAverage();
-                break;
-
+        int selection = JOptionPane.showOptionDialog(null,
+                "MENÚ PRINCIPAL \n\n Por favor, Seleccione las opciones: \n\n 1. Añadir hoja de vida.\n 2. Mostrar cédulas.\n 3. Buscar por cédula. \n 4. Buscar por nombre. \n 5. Ordenar lista por criterio.\n 6. Candidato con más experiencia. \n 7. Candidato más joven. \n 8. Contratar candidato. \n 9. Eliminar candidatos por experiencia.\n 10. Promedio edad candidatos.\n\n",
+                "Bolsa de Empleo",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null,
+                new Object[] {"1","2","3","4","5","6","7","8","9","10"},
+                0);
+        if (selection == 0){
+            addCV();}
+        else if (selection == 1){showCandidatesID();}
+        else if (selection == 2){
+            String nationalID = JOptionPane.showInputDialog("Por favor ingrese la cédula para buscar candidato:");
+            searchByID(nationalID);
         }
-        System.out.println("");
-        System.out.println("**************************");
-        System.out.println("¿Desea ir al menú o desea cerrar el programa?");
-        System.out.println("1. Ir al menú.");
-        System.out.println("2. Cerrar el programa.");
-        int answer = keyboard.nextInt();
-        if (answer == 1 ){
+        else if (selection == 3){
+            String fullName = JOptionPane.showInputDialog("Por favor ingrese el nombre que desea buscar:");;
+            searchByName(fullName);
+        }
+        else if (selection == 4) {sortList();}
+        else if (selection == 5) {mostExperienced();}
+        else if (selection == 6) {younger();}
+        else if (selection == 7) {hire();}
+        else if (selection == 8) {
+            double workExperience = Double.parseDouble(JOptionPane.showInputDialog("Por favor ingrese el número de años de experiencia mínima que debe tener. \nCandidatos con experiencia inferior a la requerida serán eliminados.\n"));
+            deleteCandidatesBcWorkExperience(workExperience);
+        }
+        else if (selection == 9){ageAverage();}
+
+        int answer = JOptionPane.showOptionDialog(null,
+                "¿Desea ir al menú o desea cerrar el programa?",
+                "Ir al menú",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Ir al menu","Cerrar el programa"},
+                0);
+        if (answer == 0 ){
             menu();
         } else {
             connection.close();
@@ -122,51 +92,43 @@ public class CVHandler {
     }
     public static void addCV() throws Exception {
         Logger.setGlobalLogLevel(Level.OFF);
-        System.out.println("");
-        System.out.println("**************************");
-
-
-        System.out.println("Ingrese los siguientes datos del aspirante. ");
-        System.out.println("Nombre completo: ");
-        keyboard.nextLine();
-        String fullName = keyboard.nextLine();
-
-        System.out.println("Cédula de ciudadanía: ");
-        String nationalID = keyboard.nextLine();
-
-        System.out.println("Edad: ");
-        int age = Integer.parseInt(keyboard.nextLine());
-
-        System.out.println("Años de experiencia: ");
-        double workExperience = Double.parseDouble(keyboard.nextLine());
-
-        System.out.println("Número de teléfono: ");
-        String phoneNumber = keyboard.nextLine();
-
-        System.out.println("Profesión: ");
-        String profession = keyboard.nextLine();
+        JOptionPane.showMessageDialog(null,"A continuación se le pedirán los datos del candidato. Por favor ingréselos con cuidado para no cometer errores.","Instrucciones",JOptionPane.INFORMATION_MESSAGE);
+        String fullName = JOptionPane.showInputDialog("Nombre completo: ");
+        String nationalID = JOptionPane.showInputDialog("Cédula de ciudadanía: ");
+        int age = Integer.parseInt(JOptionPane.showInputDialog("Edad: "));
+        double workExperience = Double.parseDouble(JOptionPane.showInputDialog("Años de experiencia: "));
+        String phoneNumber = JOptionPane.showInputDialog("Número de teléfono: ");
+        String profession = JOptionPane.showInputDialog("Profesión: ");
 
         //Create the object with data entered
-        CurriculumVitae curriculumVitae = new CurriculumVitae(nationalID, fullName, age, workExperience, profession, phoneNumber);
-        listCV.create(curriculumVitae);
+        CurriculumVitae candidate = listCV.queryForId(nationalID);
 
-
-        System.out.println("");
+        if (candidate != null) {
+            JOptionPane.showMessageDialog(null,"Ya existe un candidato con esa cédula","Error",JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,"Hoja de vida añadida","Operación exitosa",JOptionPane.INFORMATION_MESSAGE);
+            CurriculumVitae curriculumVitae = new CurriculumVitae(nationalID, fullName, age, workExperience, profession, phoneNumber);
+            listCV.create(curriculumVitae);
+        }
     }
 
-    public static void showCandidatesID() {
+    public static void showCandidatesID() throws SQLException {
         Logger.setGlobalLogLevel(Level.OFF);
-        System.out.println("");
-        System.out.println("**************************");
 
-        System.out.println("Las cédulas de los aspirantes son: ");
-        System.out.println("");
-        int counter = 1;
+        String nationalIDs[] = new String[0];
+        ArrayList<String> arrayListNationalIDs = new ArrayList<>(Arrays.asList(nationalIDs));
+        String message;
+
         for (CurriculumVitae id : listCV) {
-            System.out.println("Aspirante " + counter + ". " + id.getNationalID());
-            counter = counter+1;
+            message = ("NOMBRE:    " + id.getFullName() + "  --->  CÉDULA:    " + id.getNationalID());
+            arrayListNationalIDs.add(message);
         }
-        System.out.println("");
+
+        nationalIDs = arrayListNationalIDs.toArray(nationalIDs);
+
+        String answer = (String) JOptionPane.showInputDialog(null,"Las cédulas de los candidatos son: ", "Lista cédulas", JOptionPane.INFORMATION_MESSAGE, null, nationalIDs,null);
+
+
     }
 
     public static CurriculumVitae searchByID(String nationalID) throws SQLException {
@@ -176,14 +138,9 @@ public class CVHandler {
         CurriculumVitae candidate = listCV.queryForId(nationalID);
 
         if (candidate == null) {
-            System.out.println("No existe un candidato con cédula "+nationalID);
+            JOptionPane.showMessageDialog(null,("No existe un candidato con cédula" +nationalID),"Candidato no encontrado",JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println("Los datos del candidato con cédula "+nationalID+" son:");
-            System.out.println("");
-            System.out.println("Edad: "+candidate.getAge());
-            System.out.println("Profesión: "+candidate.getProfession());
-            System.out.println("Años de experiencia: "+candidate.getWorkExperience());
-            System.out.println("Número de teléfono: "+candidate.getPhoneNumber());
+            JOptionPane.showMessageDialog(null,("Los datos del candidato con cédula "+nationalID+" son:\n\n Nombre: "+candidate.getFullName()+"\n Edad: "+candidate.getAge()+" \n Profesión: "+candidate.getProfession()+"\n Años de experiencia: "+candidate.getWorkExperience()+"\n Número de teléfono: "+candidate.getPhoneNumber()),("Datos del candidato con cédula "+nationalID),JOptionPane.INFORMATION_MESSAGE);
         }
 
         return candidate;
@@ -203,14 +160,9 @@ public class CVHandler {
         }
 
         if (candidate == null) {
-            System.out.println("No existe un candidato con nombre "+name);
+            JOptionPane.showMessageDialog(null,("No existe un candidato con nombre" +name),"Candidato no encontrado",JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println("Los datos del candidato con nombre "+name+" son:");
-            System.out.println("");
-            System.out.println("Edad: "+candidate.getAge());
-            System.out.println("Profesión: "+candidate.getProfession());
-            System.out.println("Años de experiencia: "+candidate.getWorkExperience());
-            System.out.println("Número de teléfono: "+candidate.getPhoneNumber());
+            JOptionPane.showMessageDialog(null,("Los datos del candidato con nombre "+name+" son:\n\n Cédula: "+candidate.getNationalID()+"\n Edad: "+candidate.getAge()+" \n Profesión: "+candidate.getProfession()+"\n Años de experiencia: "+candidate.getWorkExperience()+"\n Número de teléfono: "+candidate.getPhoneNumber()),("Datos del candidato "+name),JOptionPane.INFORMATION_MESSAGE);
         }
 
         return candidate;
@@ -220,48 +172,56 @@ public class CVHandler {
     public static void sortList() throws SQLException {
         Logger.setGlobalLogLevel(Level.OFF);
 
-        System.out.println("");
-        System.out.println("**************************");
-        System.out.println("Ingrese el número del criterio por el que desea organizar la lista:");
-        System.out.println("1 - Por años de experiencia.");
-        System.out.println("2 - Por edad.");
-        System.out.println("3 - Por profesión.");
-        keyboard.nextLine();
-        String criteria = keyboard.nextLine();
+        String CV[] = new String[0];
+        ArrayList<String> arrayListCVs = new ArrayList<>(Arrays.asList(CV));
+        String message,criteria = null;
+        boolean order;
 
+        int answer = JOptionPane.showOptionDialog(null,
+                "Seleccione el criterio por el que desea organizar la lista.",
+                "Organizar lista",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Años de experiencia","Edad","Profesión"},
+                0);
 
-        switch (criteria) {
-            case "1":
-                for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("workExperience", false).prepare())){
-                    System.out.println("");
-                    System.out.println("**************************");
-                    System.out.println("AÑOS DE EXPERIENCIA: "+cv.getWorkExperience());
-                    System.out.println("Nombre: "+cv.getFullName());
-                    System.out.println("Edad: "+cv.getAge());
-                    System.out.println("Profesión: "+cv.getProfession());
-                }
-                break;
-            case "2":
-                for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("age", true).prepare())) {
-                    System.out.println("");
-                    System.out.println("**************************");
-                    System.out.println("EDAD: " + cv.getAge());
-                    System.out.println("Nombre: " + cv.getFullName());
-                    System.out.println("Años de experiencia: " + cv.getWorkExperience());
-                    System.out.println("Profesión: " + cv.getProfession());
-                }
-                break;
-            case "3":
-                for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("profession", true).prepare())) {
-                    System.out.println("");
-                    System.out.println("**************************");
-                    System.out.println("PROFESIÓN: " + cv.getProfession());
-                    System.out.println("Nombre: " + cv.getFullName());
-                    System.out.println("Edad: " + cv.getAge());
-                    System.out.println("Años de experiencia: " + cv.getWorkExperience());
-                }
-                break;
+        int orderAnswer = JOptionPane.showOptionDialog(null,
+                "Seleccione el orden que quiere utilizar en la lista.",
+                "Tipo de orden de lista",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Ascendente (menor a mayor o A...Z)","Descendente (mayor a menor o Z...A)"},
+                0);
+
+        if (orderAnswer == 0){
+            order = true;
+        } else {
+            order = false;
         }
+
+        if (answer == 0 ){
+            for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("workExperience", order).prepare())){
+                message = ("AÑOS DE EXPERIENCIA: "+cv.getWorkExperience()+" || Nombre: "+cv.getFullName()+" || Cédula: "+cv.getNationalID()+" || Edad: "+cv.getAge()+" || Profesión: "+cv.getProfession());
+                arrayListCVs.add(message);
+                criteria = "años de experiencia.";
+            }
+        } else if (answer == 1 ) {
+            for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("age", order).prepare())) {
+                message = ("EDAD: " + cv.getAge()+" || Nombre: "+cv.getFullName()+" || Cédula: "+cv.getNationalID()+" || Profesión: "+cv.getProfession()+" || Años de experiencia: " + cv.getWorkExperience());
+                arrayListCVs.add(message);
+                criteria = "edad.";
+            }
+        } else if (answer == 2){
+            for (CurriculumVitae cv : listCV.query(listCV.queryBuilder().orderBy("profession", order).prepare())) {
+                message = ("PROFESIÓN: " + cv.getProfession()+" || Nombre: "+cv.getFullName()+" || Cédula: "+cv.getNationalID()+" || Edad: "+cv.getAge()+" || Años de experiencia: " + cv.getWorkExperience());
+                arrayListCVs.add(message);
+                criteria = "profesión.";
+            }
+        }
+        CV = arrayListCVs.toArray(CV);
+
+        String showOrganizedlist = (String) JOptionPane.showInputDialog(null,("La lista organizada por "+criteria+"\n"), "Lista organizada por criterio", JOptionPane.INFORMATION_MESSAGE, null, CV,null);
+
     }
 
     public static CurriculumVitae mostExperienced(){
@@ -276,16 +236,9 @@ public class CVHandler {
         }
 
         if (candidateCV == null){
-            System.out.println("No hay candidatos para verificar.");
+            JOptionPane.showMessageDialog(null,("No hay candidatos para verificar."),"No hay cantidatos",JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println("");
-            System.out.println("**************************");
-            System.out.println("El candidato con más experiencia es: ");
-            System.out.println("Nombre: "+candidateCV.getFullName());
-            System.out.println("Edad: "+candidateCV.getAge());
-            System.out.println("Años de experiencia: "+candidateCV.getWorkExperience());
-            System.out.println("Profesión: "+candidateCV.getProfession());
-            System.out.println("Teléfono: "+candidateCV.getPhoneNumber());
+            JOptionPane.showMessageDialog(null,("El candidato con más experiencia es: \n\n"+ " Nombre: "+candidateCV.getFullName()+"\n Cédula de ciudadanía: "+candidateCV.getNationalID()+"\n Edad: "+candidateCV.getAge()+" \n Profesión: "+candidateCV.getProfession()+"\n Años de experiencia: "+candidateCV.getWorkExperience()+"\n Número de teléfono: "+candidateCV.getPhoneNumber()),("Candidato con más experiencia"),JOptionPane.INFORMATION_MESSAGE);
         }
 
         return candidateCV;
@@ -293,7 +246,7 @@ public class CVHandler {
 
     public static CurriculumVitae younger(){
         Logger.setGlobalLogLevel(Level.OFF);
-        double age = 9999;
+        double age = 999999999;
         CurriculumVitae candidateCV = null;
 
         for (CurriculumVitae curriculumVitae : listCV){
@@ -304,48 +257,34 @@ public class CVHandler {
         }
 
         if (candidateCV == null){
-            System.out.println("No hay candidatos para verificar.");
+            JOptionPane.showMessageDialog(null,("No hay candidatos para verificar."),"No hay cantidatos",JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println("");
-            System.out.println("**************************");
-            System.out.println("El candidato más joven es: ");
-            System.out.println("Nombre: "+candidateCV.getFullName());
-            System.out.println("Edad: "+candidateCV.getAge());
-            System.out.println("Años de experiencia: "+candidateCV.getWorkExperience());
-            System.out.println("Profesión: "+candidateCV.getProfession());
-            System.out.println("Teléfono: "+candidateCV.getPhoneNumber());
+            JOptionPane.showMessageDialog(null,("El candidato más joven es: \n\n"+ " Nombre: "+candidateCV.getFullName()+"\n Cédula de ciudadanía: "+candidateCV.getNationalID()+"\n Edad: "+candidateCV.getAge()+" \n Profesión: "+candidateCV.getProfession()+"\n Años de experiencia: "+candidateCV.getWorkExperience()+"\n Número de teléfono: "+candidateCV.getPhoneNumber()),("Candidato más joven"),JOptionPane.INFORMATION_MESSAGE);
         }
 
         return candidateCV;
     }
 
     public static void hire() throws SQLException {
-        System.out.println("");
-        System.out.println("**************************");
-        System.out.println("Seleccione 1 o 2 dependiendo de cómo desea seleccionar al candidato: ");
-        System.out.println("1 Por nombre.");
-        System.out.println("2 Por cédula.");
-        keyboard.nextLine();
-
-        String busqueda = keyboard.nextLine();
         CurriculumVitae aspirant = null;
 
-        switch (busqueda){
-            case "1":
-                System.out.println("Ingrese el nombre del candidato:");
-                aspirant = searchByName(keyboard.nextLine());
-                break;
-            case "2":
-                System.out.println("Ingrese la cédula del candidato:");
-                aspirant = searchByID(keyboard.nextLine());
-                break;
+        int answer = JOptionPane.showOptionDialog(null,
+                "Por favor, seleccione cómo desea seleccionar al candidato.",
+                "Contratar candidato",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                new Object[] {"Por nombre","Por cédula"},
+                0);
+        if (answer == 0 ){
+            aspirant = searchByName(JOptionPane.showInputDialog("Ingrese nombre del candidato."));
+        } else {
+            aspirant = searchByID(JOptionPane.showInputDialog("Ingrese cédula del candidato."));
         }
 
-        System.out.println("");
         if (aspirant == null){
-            System.out.println("No existe ese candidato para contratar");
+            JOptionPane.showMessageDialog(null,("No existe candidato para contratar."),"No hay candidato",JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println("El candidato "+aspirant.getFullName()+" con cédula de ciudadanía "+aspirant.getNationalID()+" fue contratado, por lo tanto eliminado de la bolsa de empleo.");
+            JOptionPane.showMessageDialog(null,("El candidato "+aspirant.getFullName()+" con cédula de ciudadanía "+aspirant.getNationalID()+" fue contratado, por lo tanto eliminado de la bolsa de empleo."),"Candidato contratado",JOptionPane.INFORMATION_MESSAGE);
             listCV.delete(aspirant);
         }
 
@@ -362,7 +301,8 @@ public class CVHandler {
             }
         }
 
-        System.out.println(counter+" candidatos fueron eliminados porque tenían menos de "+workExperience+" años de experiencia.");
+        System.out.println();
+        JOptionPane.showMessageDialog(null,(counter+" candidatos fueron eliminados porque tenían menos de "+workExperience+" años de experiencia."),"Candidatos eliminados por tener poca experiencia",JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static double ageAverage() {
@@ -379,11 +319,10 @@ public class CVHandler {
         average = (double)totalAges/counter;
         String formattedAverage = String.format("%.2f", average);
 
-        System.out.println("Habían "+counter+" candidatos. El promedio de edad de estos es de "+formattedAverage+" años.");
+        JOptionPane.showMessageDialog(null,("Habían "+counter+" candidatos. El promedio de edad de estos es de "+formattedAverage+" años."),"Promedio de edad de candidatos",JOptionPane.INFORMATION_MESSAGE);
 
         return average;
     }
-
 
 }
 
